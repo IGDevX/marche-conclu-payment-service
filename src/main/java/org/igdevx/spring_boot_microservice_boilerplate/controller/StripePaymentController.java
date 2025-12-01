@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * For order-related payment tracking, see OrderPaymentController
  */
 @RestController
-@RequestMapping("/api/payments")
+@RequestMapping("/stripe-payments")
 @RequiredArgsConstructor
 @Slf4j
 public class StripePaymentController {
@@ -25,7 +25,7 @@ public class StripePaymentController {
 
     /**
      * Create a payment intent (supports connected accounts)
-     * POST /api/payments/create-intent
+     * POST /stripe-payments/create-intent
      */
     @PostMapping("/create-intent")
     public ResponseEntity<?> createPaymentIntent(@RequestBody PaymentIntentRequest request) {
@@ -73,7 +73,7 @@ public class StripePaymentController {
 
     /**
      * Retrieve payment intent status
-     * GET /api/payments/{paymentIntentId}
+     * GET /stripe-payments/{paymentIntentId}
      */
     @GetMapping("/{paymentIntentId}")
     public ResponseEntity<?> getPaymentIntent(@PathVariable String paymentIntentId) {
@@ -93,7 +93,7 @@ public class StripePaymentController {
 
     /**
      * Cancel a payment intent
-     * DELETE /api/payments/{paymentIntentId}
+     * DELETE /stripe-payments/{paymentIntentId}
      */
     @DeleteMapping("/{paymentIntentId}")
     public ResponseEntity<?> cancelPaymentIntent(@PathVariable String paymentIntentId) {
@@ -113,7 +113,7 @@ public class StripePaymentController {
 
     /**
      * Health check endpoint
-     * GET /api/payments/health
+     * GET /stripe-payments/health
      */
     @GetMapping("/health")
     public ResponseEntity<String> health() {

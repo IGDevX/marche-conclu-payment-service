@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
 @RequiredArgsConstructor
 @Slf4j
 public class OrderPaymentController {
@@ -24,7 +23,7 @@ public class OrderPaymentController {
 
     /**
      * 1. Record Payment (upsert pattern)
-     * POST /api/orders/{orderId}/payment
+     * POST /orders/{orderId}/payment
      */
     @PostMapping("/orders/{orderId}/payment")
     public ResponseEntity<PaymentRecordResponse> recordPayment(
@@ -46,12 +45,11 @@ public class OrderPaymentController {
 
     /**
      * 2. Get Payment Status
-     * GET /api/orders/{orderId}/payment
+     * GET /orders/{orderId}/payment
      */
     @GetMapping("/orders/{orderId}/payment")
     public ResponseEntity<PaymentRecordResponse> getPaymentStatus(@PathVariable String orderId) {
         try {
-            log.info("Getting payment status for order: {}", orderId);
             PaymentRecordResponse response = orderPaymentService.getPaymentStatus(orderId);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
@@ -65,7 +63,7 @@ public class OrderPaymentController {
 
     /**
      * 3. Update Order Status
-     * PATCH /api/orders/{orderId}/status
+     * PATCH /orders/{orderId}/status
      */
     @PatchMapping("/orders/{orderId}/status")
     public ResponseEntity<OrderStatusUpdateResponse> updateOrderStatus(
@@ -84,7 +82,7 @@ public class OrderPaymentController {
 
     /**
      * 4. Stripe Webhook Handler (Standard Account Webhooks)
-     * POST /api/webhooks/stripe
+     * POST /webhooks/stripe
      */
     @PostMapping("/webhooks/stripe")
     public ResponseEntity<Map<String, Boolean>> handleStripeWebhook(
@@ -104,10 +102,10 @@ public class OrderPaymentController {
 
     /**
      * 4b. Stripe Connect Webhook Handler (Connected Account Events)
-     * POST /api/webhooks/stripe/connect
+     * POST /webhooks/stripe/connect
      * 
      * Use Stripe CLI for local testing:
-     * stripe listen --forward-connect-to localhost:5004/api/webhooks/stripe/connect
+     * stripe listen --forward-connect-to localhost:5004/webhooks/stripe/connect
      */
     @PostMapping("/webhooks/stripe/connect")
     public ResponseEntity<Map<String, Boolean>> handleConnectWebhook(
@@ -127,7 +125,7 @@ public class OrderPaymentController {
 
     /**
      * 5. Payment Verification (Optional but recommended)
-     * POST /api/payments/verify/{paymentIntentId}
+     * POST /payments/verify/{paymentIntentId}
      */
     @PostMapping("/payments/verify/{paymentIntentId}")
     public ResponseEntity<PaymentRecordResponse> verifyPayment(@PathVariable String paymentIntentId) {

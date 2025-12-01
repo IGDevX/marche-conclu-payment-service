@@ -26,8 +26,6 @@ public class OrderPaymentService {
      */
     @Transactional
     public PaymentRecordResponse recordPayment(String orderId, PaymentRecordRequest request) {
-        log.info("Recording payment for order: {} with payment intent: {}", orderId, request.getPaymentIntentId());
-
         // Find existing payment record or create new one
         Optional<OrderPayment> existingPayment = orderPaymentRepository.findByOrderId(orderId);
         
@@ -67,7 +65,6 @@ public class OrderPaymentService {
      */
     public PaymentRecordResponse getPaymentStatus(String orderId) {
         log.info("Retrieving payment status for order: {}", orderId);
-
         Optional<OrderPayment> payment = orderPaymentRepository.findByOrderId(orderId);
         
         if (payment.isPresent()) {
