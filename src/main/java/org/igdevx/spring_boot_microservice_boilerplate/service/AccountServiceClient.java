@@ -3,7 +3,6 @@ package org.igdevx.spring_boot_microservice_boilerplate.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.igdevx.spring_boot_microservice_boilerplate.dto.AccountStripeInfoResponse;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.RestClientException;
@@ -18,15 +17,14 @@ public class AccountServiceClient {
 
     private final RestTemplate restTemplate;
 
-    @Value("${microservices.account-service.url:http://account-service:8080}")
-    private String accountServiceUrl;
+    private static final String ACCOUNT_SERVICE_URL = "lb://account-service";
 
     /**
      * Get Stripe account information for a producer
      */
     public AccountStripeInfoResponse getProducerStripeInfo(String producerKeycloakId) {
         try {
-            String url = accountServiceUrl + "/api/v1/account/stripe/connected-account";
+            String url = ACCOUNT_SERVICE_URL + "/account/stripe/connected-account";
             log.info("Fetching Stripe account info for producer: {} from: {}", producerKeycloakId, url);
             
             // Create headers with Keycloak ID
